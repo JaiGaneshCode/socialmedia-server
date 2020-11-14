@@ -2,19 +2,23 @@ const {model, Schema} = require('mongoose');
 
 const postSchema = new Schema({
     body: String,
-    username: String,
-    password: String,
     createdAt: String,
     comments: [
         {
             body: String,
-            username: String,
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'users'
+            },
             createdAt: String
         }
     ],
     likes: [
         {
-            username: String,
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'users'
+            },
             createdAt: String
         }
     ],

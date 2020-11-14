@@ -15,18 +15,27 @@ function generateToken(user) {
 }
 
 module.exports = {
-
+    Query:{
+        async getUsers(){
+            try{
+                const users = await User.find().sort({ username: 1 });
+                return users;
+            }catch(err){
+                console.log(err);
+            }
+        } 
+    },
     Mutation:{
-        async login(_, { username, password }){
-            const {errors, valid} = validateLoginInput(username, password);
+        async login(_, { email, password }){
+            const {errors, valid} = validateLoginInput(email, password);
             if(!valid){
                 throw new UserInputError('Errors', { errors });
             }
 
-            const user = await User.findOne({ username });
+            const user = await User.findOne({ email });
             if(!user){
-                errors.general = 'User not found!';
-                throw new UserInputError('User not found', { errors });
+                errors.general = 'Email not registered!';
+                throw new UserInputError('Email not registered', { errors });
             }
 
             const match = await bcrypt.compare(password, user.password);
@@ -49,15 +58,15 @@ module.exports = {
             if(!valid){
                 throw new UserInputError('Errors', { errors });
             }
-            const user = await User.findOne({ username });
+            const user = await User.findOne({ email });
             if(user){
-                throw new UserInputError('User name is taken', {
+                throw new UserInputError('Email already exists', {
                     errors:{
-                        username: 'This username is taken'
+                        username: 'Email already exists !'
                     }
                 })
             }
-            // TODO: hash password
+
             password = await bcrypt.hash(password, 12);
 
             const newUser = new User({

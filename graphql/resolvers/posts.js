@@ -36,10 +36,10 @@ module.exports= {
             const newPost = new Post({
                 body,
                 user: user.id,
-                username: user.username,
                 createdAt: new Date().toISOString()
             });
 
+            console.log(newPost);
             const post = await newPost.save();
 
             context.pubSub.publish('NEW_POST', {
@@ -53,7 +53,7 @@ module.exports= {
 
             try{
                 const post = await Post.findById(postId);
-                if(user.username === post.username){
+                if(user.id === post.userId){
                     await post.delete();
                     return 'Post deleted successfully!'
                 }else{
@@ -64,15 +64,15 @@ module.exports= {
             }
         },
         async likePost(_, {postId}, context){
-            const {username} = checkAuth(context);
+            const {id} = checkAuth(context);
 
             const post = await Post.findById(postId);
             if(post){
-                if(post.likes.find(like => like.username === username)){
-                    post.likes = post.likes.filter(like => like.username !== username);
+                if(post.likes.find(like => like.userId === id)){
+                    post.likes = post.likes.filter(like => like.userId !== id);
                 }else{
                     post.likes.push({
-                        username,
+                        userId: id,
                         createdAt: new Date().toISOString()
                     })
                 }
