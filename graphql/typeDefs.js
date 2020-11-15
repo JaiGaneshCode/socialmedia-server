@@ -5,7 +5,7 @@ module.exports= gql`
         id: ID!
         body: String!
         createdAt: String!
-        user: ID!
+        user: User!
         comments:[Comment]!
         likes:[Like]!
         likeCount: Int!
@@ -15,14 +15,14 @@ module.exports= gql`
     type Comment{
         id: ID!
         createdAt: String!,
-        user: ID!
+        user: User!
         body: String!
     }
 
     type Like{
         id: ID!
         createdAt: String!
-        user: ID!
+        user: User!
     }
 
     type User{
@@ -48,6 +48,7 @@ module.exports= gql`
         getPosts: [Post]
         getPost(postId: ID!): Post
         getUsers: [User]
+        getUser(userId: ID!): User
     }
 
     type Mutation{

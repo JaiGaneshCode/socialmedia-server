@@ -1,5 +1,6 @@
 const { AuthenticationError, UserInputError } = require('apollo-server');
 const Post = require('../../models/Post');
+const User = require('../../models/User');
 const checkAuth = require('../../utils/check-auth');
 
 module.exports= {
@@ -39,7 +40,6 @@ module.exports= {
                 createdAt: new Date().toISOString()
             });
 
-            console.log(newPost);
             const post = await newPost.save();
 
             context.pubSub.publish('NEW_POST', {
@@ -53,7 +53,7 @@ module.exports= {
 
             try{
                 const post = await Post.findById(postId);
-                if(user.id === post.userId){
+                if(user.id == post.user){
                     await post.delete();
                     return 'Post deleted successfully!'
                 }else{
@@ -68,11 +68,11 @@ module.exports= {
 
             const post = await Post.findById(postId);
             if(post){
-                if(post.likes.find(like => like.userId === id)){
-                    post.likes = post.likes.filter(like => like.userId !== id);
+                if(post.likes.find(like => like.user === id)){
+                    post.likes = post.likes.filter(like => like.user !== id);
                 }else{
                     post.likes.push({
-                        userId: id,
+                        user: id,
                         createdAt: new Date().toISOString()
                     })
                 }

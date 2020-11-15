@@ -8,7 +8,7 @@ const postSchema = new Schema({
             body: String,
             user: {
                 type: Schema.Types.ObjectId,
-                ref: 'users'
+                ref: 'User'
             },
             createdAt: String
         }
@@ -17,14 +17,14 @@ const postSchema = new Schema({
         {
             user: {
                 type: Schema.Types.ObjectId,
-                ref: 'users'
+                ref: 'User'
             },
             createdAt: String
         }
     ],
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'users'
+        ref: 'User'
     }
 });
 

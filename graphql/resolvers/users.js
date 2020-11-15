@@ -23,6 +23,14 @@ module.exports = {
             }catch(err){
                 console.log(err);
             }
+        },
+        async getUser(_, { userId }){
+            try{
+                const user = await User.findById(userId);
+                return user;
+            }catch(err){
+                console.log(err);
+            } 
         } 
     },
     Mutation:{

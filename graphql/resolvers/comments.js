@@ -20,7 +20,7 @@ module.exports = {
             if(post){
                 post.comments.unshift({
                     body,
-                    userId: id,
+                    user: id,
                     createdAt: new Date().toISOString()
                 });
 
@@ -38,7 +38,7 @@ module.exports = {
             if(post){
                 const commentIndex = post.comments.findIndex(c => c.id === commentId);
 
-                if(post.comments[commentIndex].userId === id){
+                if(post.comments[commentIndex].user === id){
                     post.comments.splice(commentIndex, 1);
                     await post.save();
 
