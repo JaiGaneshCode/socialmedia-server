@@ -1,6 +1,6 @@
 const {ApolloServer, PubSub} = require('apollo-server');
-const gql = require('graphql-tag');
 const mongoose = require('mongoose');
+const express = require('express')
 
 const {MONGODB} = require('./config.js');
 const resolvers = require('./graphql/resolvers');
@@ -28,3 +28,15 @@ mongoose
     .catch(err => {
         console.log(err);
     });
+
+const app = express();
+
+function checksignin(req, res, next){
+    console.log("Testi auth");
+    next();
+}
+
+app.use('/images', checksignin, express.static(__dirname + '/images')); //Serves resources from images folder
+
+
+var fileServer = app.listen(4000, () => console.log("Static server started"));

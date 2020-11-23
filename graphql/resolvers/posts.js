@@ -44,7 +44,7 @@ module.exports= {
 
             context.pubSub.publish('NEW_POST', {
                 newPost: post
-            })
+            });
 
             return post;
         },

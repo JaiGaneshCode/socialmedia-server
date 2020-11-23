@@ -1,10 +1,16 @@
 const postsResolvers = require('./posts');
 const usersResolvers = require('./users');
 const commentResolvers = require('./comments');
+const fileResolvers = require('./fileupload');
 
 const User = require('../../models/User');
+const File = require('../../models/File');
 
 module.exports= {
+
+    User: {
+        file: async (parent) => await File.findById(parent.file)
+    },
     Post: {
         likeCount: (parent) => parent.likes.length,
         commentCount: (parent) => parent.comments.length,
@@ -16,6 +22,9 @@ module.exports= {
     Like: {
         user: async (parent) => await User.findById(parent.user)
     },
+    Relationship: {
+        user: async (parent) => await User.findById(parent.user)
+    },
     Query: {
         ...postsResolvers.Query,
         ...usersResolvers.Query
@@ -23,7 +32,8 @@ module.exports= {
     Mutation: {
         ...usersResolvers.Mutation,
         ...postsResolvers.Mutation,
-        ...commentResolvers.Mutation
+        ...commentResolvers.Mutation,
+        ...fileResolvers.Mutation
     },
     Subscription:{
         ...postsResolvers.Subscription
