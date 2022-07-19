@@ -129,6 +129,46 @@ module.exports = {
                 throw new AuthenticationError("Action not allowed");
             }
         },
+        async resetPassword(_, {password}, context){
+            
+            const { id } = checkAuth(context);
+
+            const user = await User.findById(id);
+            if (!user) {
+                errors.general = "Email not registered!";
+                throw new UserInputError("Email not registered", { errors });
+            }
+            password = await bcrypt.hash(password, 12);
+            user.password = password;
+            await user.save();
+
+            const token = generateToken(user);
+
+            return {
+                ...user._doc,
+                id: user._id,
+                token,
+            };
+        },
+        async resetPasswordByEmail(_, {email, password}, context){
+
+            const user = await User.findOne({ email });
+            if (!user) {
+                errors.general = "Email not registered!";
+                throw new UserInputError("Email not registered", { errors });
+            }
+            password = await bcrypt.hash(password, 12);
+            user.password = password;
+            await user.save();
+
+            const token = generateToken(user);
+
+            return {
+                ...user._doc,
+                id: user._id,
+                token,
+            };
+        },
         async modifyUser(_, { modifyUserInput: { id: userId, username, email, file, password, confirmPassword } }, context){
             const { id } = checkAuth(context);
 

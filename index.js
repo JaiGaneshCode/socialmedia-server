@@ -32,7 +32,7 @@ mongoose
 const app = express();
 
 function checksignin(req, res, next){
-    console.log("Testi auth");
+    console.log("Testing auth");
     next();
 }
 
